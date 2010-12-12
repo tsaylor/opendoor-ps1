@@ -1,0 +1,18 @@
+to get running
+1) outside of the repo root, run "virtualenv opendoor-env"
+2) run "source opendoor-env/bin/activate"
+3) cd opendoor/auth-server
+4) pip install -r requirements.pip
+5) cd project
+6) python manage.py syncdb
+6a) create a superuser, doesn't matter the info you give it.
+7) python manage.py runserver
+
+The auth server is now running. Interface with it from the command line using curl
+
+Add a user: curl -d 'uid=tsaylor@pumpingstationone.org&public_key=mQGiBDTHk3QRBADS6Q2nWx7odZJlA2m2iJyKxHde5pr9SD' http://localhost:8000/opendoor/user/
+List users: curl http://localhost:8000/opendoor/user/
+Add a resource: curl -d 'name=door' http://localhost:8000/opendoor/resource/
+List resources: curl http://localhost:8000/opendoor/resource/
+Add a resource level for a user: curl -d 'level=1' http://localhost:8000/opendoor/resourcelevel/tsaylor@pumpingstationone.org/door/
+Show the resource level for a user: curl http://localhost:8000/opendoor/resourcelevel/tsaylor@pumpingstationone.org/door/
