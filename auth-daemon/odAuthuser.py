@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 
 from time import time
-import sys,string,json,hashlib
+import sys,string,json,hashlib,urllib2
 import odSettings
 
 class odCard:
@@ -17,49 +17,57 @@ class odCard:
     			raise
 	
 	def parseCard(self,f):
-		file = str(f.read())
-		self.card = json.loads(file)
+		self.card = json.loads(str(f.read()))
 	
 	def printCard(self):
 		print json.dumps(self.card,sort_keys=True,indent=4)
 
-class odLocalCache:
+class odCache:
 	def __init__(self):
-		self.__internal = dict()
+		self.cache = dict()
 
-	def add(self,tuple):
-		self.__internal[tuple[0]] = (tuple[1],tuple[2])
+	def add(self,uid,stamped_sig):
+		self.cache[uid] = (stamped_sig[0],stamped_sig[1])
 	
 	def get(self,uid):
-		print self.__internal[uid]
-		return self.__internal[uid]
+		if self.exists(uid):
+			return self.cache.get(uid,None)
 	
 	def cleanExpired(self):
 		current_time = int(time())
-		for key in self.__internal.iterkeys():
-			deltatime = current_time - int(self.__internal[key][1])
-			if ( odSettings.OD_CACHE_TIME*60*60 < deltatime ):
-				del self.__internal[key]
+		for key in self.cache.iterkeys():
+			deltatime = current_time - int(self.cache[key][1])
+			if ( odSettings.CACHE_TIME*60*60 < deltatime ):
+				del self.cache[key]
 	
 	def isExpired(self,key):
 		current_time = int(time())
-		deltatime = current_time - int(self.__internal[key][1])
-		if ( odSettings.OD_CACHE_TIME*60*60 < deltatime ):
+		deltatime = current_time - int(self.cache[key][1])
+		if ( odSettings.CACHE_TIME*60*60 < deltatime ):
 			return True
 		else:
 			return False
 
 	def exists(self,key):
-		if (key in self.__internal):
+		if (key in self.cache):
 			return True
 		else:
 			return False
 		
 authtoken = odCard(sys.argv[1])
-cache = odLocalCache()
-print authtoken.card['data']['uid']
-if ( cache.get(authtoken.card['data']['uid'])[0] == authtoken.card['meta']['pgp-signature'] ):
-	if not cache.isExpired(authtoken.card['data']['uid']):
-		exit(0)
+cache = odCache()
 
-cache.add((authtoken.card['data']['uid'],authtoken.card['meta']['pgp-signature'],time()))
+cache.add(authtoken.card['data']['uid'],(authtoken.card['meta']['pgp-signature'],time()))
+
+if cache.exists(authtoken.card['data']['uid']):
+	if not cache.isExpired(authtoken.card['data']['uid']):
+		if ( cache.get(authtoken.card['data']['uid'])[0] == authtoken.card['meta']['pgp-signature'] ):
+			print "USER IS AUTHORIZED"
+			exit (0)
+			
+url = authtoken.card['data']['url']
+url = url + '/opendoor/user/'+ authtoken['data']['uid']
+response = urllib2.urlopen(url).read()
+authorizetoken = json.loads(response)
+
+if authorizetoken.

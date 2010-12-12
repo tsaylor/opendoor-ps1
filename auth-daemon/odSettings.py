@@ -1,3 +1,5 @@
 #!/usr/bin/env python
 
-OD_CACHE_TIME = 4 #hours
+CACHE_TIME = 4 #hours
+MEMLEVEL_THRESHOLD = 50
+TOOL_THRESHOLD = 50
