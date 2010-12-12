@@ -18,10 +18,12 @@ class ResourceHandler(BaseHandler):
 class user_resourceHandler(BaseHandler):
     model = user_resource
 
-    def read(self, request, uid, name):
+    def read(self, request, uid, name=None):
         ret = user_resource.objects.all()
-        ret = ret.filter(user__uid = uid)
-        ret = ret.filter(resource__name = name)
+        if uid != '0':
+            ret = ret.filter(user__uid = uid)
+        if name:
+            ret = ret.filter(resource__name = name)
         return ret
 
     def create(self, request, uid, name):

@@ -13,4 +13,5 @@ urlpatterns = patterns('',
    url(r'^resource/(?P<name>.*)/$', resource_resource),
    url(r'^resourcelevel/$', user_resource_resource),
    url(r'^resourcelevel/(?P<uid>.*)/(?P<name>.*)/$', user_resource_resource),
+   url(r'^resourcelevel/(?P<uid>.*)/$', user_resource_resource),
 )
