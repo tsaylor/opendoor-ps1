@@ -1,0 +1,35 @@
+The most important thing to this system is the message format that we are all passing around. This started when someone in the #opendoor channel mention that we could use vcard. vcard is based on directory standards RFC-2425, which makes it a good start for this. On the other hand, OpenDoor is a hackathon, so following that line of thought vcard doesn't entirely fit our specs. So I added some fields. And some more fields. And started to write a parser. Annnd thus we use JSON. nuff said.
+
+So our new odCards are JSON objects. Version 1.0 which I am making up has three sections and a header. 
+	*odCard #This will equal the version of odCard its at. 
+	*data #Contains user data fields like UID and authentication url and whether you think arduinos are overrated
+	*resa #Contains resource data set by authentication source. Like if your trained on a tablesaw or allowed in.
+	*meta #Contains information about the information. Like PGP signatures of data and resa and how the odCard reached the server.
+
+data fields:
+
+uid
+pass-hash
+pass-salt
+sound
+url
+
+resa fields:
+
+authurl
+memlevel
+tool-tablesaw
+tool-linux
+tool-arduino
+
+meta fields:
+
+sig-all # excluding meta of course
+sig-data
+sig-resa
+cardsrc
+
+Some notes:
+1: There are vague namespaces to these values.
+2: The tool-* variables are going to huge right? Who has an authoriative list of all tools in existance? What if one space has a tool-fricken-sharks-with-lasers-on-their-head and you just happen to have a memember who is an expert on them? To start with, I'd probably let them in regardless of anything else if that field was set. For the benefit of the spaces, we will set up a list somewhere (hackerspaces.org?) where everyone can contribute their tools to the list, which our authentication software can update automatically. This will prevent duplicates (hopefully) and allow for some consistancy when doing reciprocity.3: What about the memlevel and tool- fields value? A boolean would work, but seems limited. These fields should be a integer between 00 and 99 with 99 being the highest. The general rule taken from analog circuits, if its above half its true, below is false. So a memlevel of 49 would be false, while a 50 would be true. If you set your memlevels to 49 or 50 though I will hate you. The idea is to have some agreed upon levels set in the reciprocity extensions as every space could have different member levels and privledges attached to each. 
+

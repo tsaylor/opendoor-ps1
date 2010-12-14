@@ -1,0 +1,23 @@
+Goal? A door system is pretty simple, and RFID are hacks galore. What we intended was to build a complete framework to allow for easy integration of different hackerspaces users. A truely OpenDoor. So if we publish that our system only works with iButtons or RFID or USB keys, the first space that doesn't use those is going to say fuck you and build their own. Thats against the purpose of the project. 
+
+Resource Authentication:
+
+It goes like this.
+
+1) You give us your signed odCard by any method you want. Smoke signals for all we care.  
+2) We make sure we have reciprocity with the hackerspace that you're saying authorized you.
+3) We contact that hackerspace and verify that you signed that odCard. #via pulling your PKI and checking the data signature currently
+4) We also contact that hackerspace and make sure that you're a good member and all.
+5) We then go through all our plugins to match everything your hackerspace told us about you to our systems. 
+6) If we want, we can use the pass-hash and pass-salt fields to make you enter something to prove its you whos holding the odCard.
+7) The we let you access the resource (be it door, vending machine, tablesaw, whatever) if everything has passed
+8) We then execute our "event plugins" like turning up the heat or activating the killing robot if you're from qccolab. 
+
+
+Thats just for resource auth. The cool thing about odCards is that they can be used for a hacker directory service. We will probably use them for the backend of our member managment software. JSON serializes beautifully and goes neatly into SQL.
+
+Concerning Hardware: 
+
+an odCard is a pretty big dataset. There are some fields that are only server side. There are some fields that you want to restrict who can read them. Your spaces server may not let the rest of the spaces have your phone number or your paypal account. This is all very easy to implement. For hardware like RFID and iButtons, tokens that are on your person, there is a minimum amount of data we need to authenticate you. UID, pass-hash, pass-salt, authurl, sig-all. That data comes up to about 1KB, which ibuttons and rfid cards can handle just fine. USB sticks handle it even better, though I would suggest writing the datablocks directly into the memory and not as a file on a filesystem. This both separates your key from your data, it also lets a simple C program just read() a set of blocks for much faster authentication. 
+
+We will be making the auth server fit into a embedded linux router like a wrt54g or the la foneria so it can be packaged up with everything needed. The Accton MR3201 has wifi for connectivity, serial for 1wire iButton or paralax readers, and can control however many other readers/resources you want via its ethernet port. Connect to arduinos over a private network and ethernet shields. Switched cheap wires ftw! 

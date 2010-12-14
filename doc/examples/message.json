@@ -2,8 +2,9 @@
     "OpenDoorID":"1.0", 
     "data":{"uid":"rhys@pumpingstationone.org",
             "url":"https://auth.pumpingstationone.org",
-            "x-salt":"x033",
-            "x-hash":"{SHA256}21a57f2fe765e1ae4a8bf15d73fc1bf2a533f547f2343d12a499d9c0592044d4"}, 
+            "salt":"x033",
+            "hash":"{SHA256}21a57f2fe765e1ae4a8bf15d73fc1bf2a533f547f2343d12a499d9c0592044d4"},
+    "resources":{"tablesaw":"99"}, 
     "meta":{"pgp-signature":"iQEcBAEBAgAGBQJNBEcvAAoJEDd9d3bEOp5BuIkH/j0Dg2FRFy9eywzFy0ihrxfOiYq8HZuEVlZljwvFsx2grw/ywUkyaRvT5M50GhZl13gyypiSjqqyEsVJb/9pnZuCXEJIG20GksGQbCB5kWSoj9nuU49khzdxIw9ZQl6ifhi+dIjENGYZZ+U3WICq2dTdiz28OnXcIrmvCx/UP4iFAIfF4kwwXEK67WHMwK7Io8QgAkYgB9DtZ4MdNXyoV+eH9wvHZThse0uQVIPqRPgvQfBpDcFJS6YG7TFL/uAX7Bs2U1bg9W4yyZ5WqRDQAnfEvRykrdz6I/5XTHqSX0Kmzy4lOLCOPWg1m2UokBXu3JFIOFEBihFUX14DMzO3R7k==v1Vf"}
 }
 
